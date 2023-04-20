@@ -31,7 +31,7 @@
 
 ***
 ## 🔔 사용법
-1. SQL Developer에서 계정 생성 후 '이젠서울로 스키마 종합.sql' 파일을 그대로 실행하여 필요한 테이블과 프로시저, 트리거를 생성한다.
+1. SQL Developer에서 계정 생성 후 'seoullo.sql' 파일을 그대로 실행하여 필요한 테이블과 프로시저, 트리거를 생성한다.
 2. root-context.xml의 20~22행(jdbcUrl의 value 값과 username, password)을 수정한다.
 3. Tomcat Server의 Modules에서 포트번호는 80, Path는 "/"로 수정한다.
 4. 서버가 정상적으로 구동되는 것을 확인 후 브라우저에서 접속한다.
