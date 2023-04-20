@@ -115,7 +115,7 @@
 	<!-- 일반회원 회원가입 -->
 	<insert id="commonWelcom">
 		insert into
-		member(id,pw,name,gradeNo,nickName,age,tel,email,gender)
+		member(id,pw,name,gradeNo,nickName,age,tel,e_mail,gender)
 		values(#{id},
 		#{pw}, #{name},#{gradeNo}, #{nickName},#{age},#{tel} ,#{email},
 		#{gender})
