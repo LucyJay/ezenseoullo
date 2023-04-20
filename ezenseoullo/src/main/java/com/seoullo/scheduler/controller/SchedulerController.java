@@ -28,7 +28,7 @@ public class SchedulerController {
 	}
 
 	// DB와 일치하지 않는 파일 삭제
-	@Scheduled(cron = "30 * * * * *")
+	@Scheduled(cron = "30 0 * * * *")
 	public void deleteTourFiles() {
 		tourService.deleteTourFiles();
 
