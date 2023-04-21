@@ -34,7 +34,8 @@
 1. SQL Developer에서 계정 생성 후 'seoullo.sql' 파일을 그대로 실행하여 필요한 테이블과 프로시저, 트리거를 생성한다.
 2. root-context.xml의 20~22행(jdbcUrl의 value 값과 username, password)을 수정한다.
 3. Tomcat Server의 Modules에서 포트번호는 80, Path는 "/"로 수정한다.
-4. 서버가 정상적으로 구동되는 것을 확인 후 브라우저에서 접속한다.
+4. src/main/webapp/WEB-INF/views/tour 폴더의 preview.jsp, update.jsp, view.jsp, write.jsp 상단의 [src="//dapi.kakao.~] 부분에 Kakao 지도 API의 appkey를 넣는다.
+5. 서버가 정상적으로 구동되는 것을 확인 후 브라우저에서 접속한다.
 * 투어 데이터 중 '연남동 카페 투어'와 '인사동 전통체험 투어'에만 상세 정보가 들어가 있고, 이 두 투어만 수정 작업이 정상적으로 동작합니다. 다른 투어들은 리스트 목록을 위해 기본정보와 태그만 INSERT한 데이터임을 참고해 주세요.
 
 ***
