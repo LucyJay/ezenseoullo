@@ -43,4 +43,6 @@
 
 상세한 내용은 Wiki 탭을 참조해 주세요.
 
--: <#>
+투어 리스트 및 정렬 : <https://github.com/LucyJay/ezenseoullo/wiki/1.-투어-리스트>
+투어 상세보기(기본정보 탭, 상세보기 탭) : <https://github.com/LucyJay/ezenseoullo/wiki/2.-투어-상세보기>
+투어 등록 : <https://github.com/LucyJay/ezenseoullo/wiki/3.-투어->
