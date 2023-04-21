@@ -13,8 +13,7 @@ import com.webjjang.util.PageObject;
 public interface TourMapper {
 
 	// 리스트 관련 쿼리
-	public List<TourVO> list(@Param("tag") String tag, @Param("title") String title, @Param("region") String region,
-			@Param("closed") int closed);
+	public List<TourVO> list(@Param("tag") String tag, @Param("title") String title, @Param("region") String region);
 
 	public List<TourVO> listByGuide(String id);
 

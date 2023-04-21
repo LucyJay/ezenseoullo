@@ -14,6 +14,7 @@
 		$("#arrayByHit").click(function() {
 			tourlistService.arrayByHit("${list}", function(data) {
 				showList(data);
+				// 마감 제외 체크는 자동으로 해제
 				$("#closed").prop('checked', false);
 				$("#closed").attr('checked', false);
 			});
@@ -23,6 +24,7 @@
 		$("#arrayByRegdate").click(function() {
 			tourlistService.arrayByRegdate("${list}", function(data) {
 				showList(data);
+				// 마감 제외 체크는 자동으로 해제
 				$("#closed").prop('checked', false);
 				$("#closed").attr('checked', false);
 			});
@@ -50,7 +52,7 @@
 			}
 		});
 
-		//리스트를 다시 불러오는 쿼리~~~~~~~~~~
+		//리스트를 다시 불러오는 기능
 		function showList(list) {
 			let listDiv = $("#listDiv");
 			let str = "";
@@ -66,13 +68,9 @@
 				str += "<img class='thumbnailImg' src='" + list[i].thumbnail + "' width='247.5px' height='200px' data-no='"+list[i].no+"'>";
 				str += "<div class='underImg' data-no='"+list[i].no+"'>";
 				str += "<div class='tourType'><span style='color: #DC143C; font-weight:bold;'>["
-						+ list[i].status
-						+ "]  </span>"
-						+ list[i].type
-						+ "</div>";
+						+ list[i].status + "]  </span>" + list[i].type + "</div>";
 				str += "<div class='tourTitle'>" + list[i].title + "</div>";
-				str += "<div class='tourDescription'>" + list[i].description
-						+ "</div></div>";
+				str += "<div class='tourDescription'>" + list[i].description + "</div></div>";
 				str += "<div class='tags'>";
 				for (let j = 0; j < tagList.length; j++) {
 					str += "<span class='eachTag' data-tag='" + tagList[j] + "'> #"
@@ -98,6 +96,7 @@
 			});
 		}
 
+		// 해당 칸 클릭 시 상세보기로 이동
 		$(".thumbnailImg").on("click", function() {
 			let no = $(this).data("no");
 			location = "view.do?no=" + no;
@@ -108,6 +107,7 @@
 			location = "view.do?no=" + no;
 		});
 
+		// 태그 클릭 시 태그로 검색하는 기능
 		$(".eachTag").on("click", function() {
 			let tag = $(this).data("tag");
 			location = "list.do?searchKey=tag&searchWord=" + tag;
@@ -197,11 +197,11 @@
 </head>
 <body>
 	<div class="container">
-
 		<div id="chooseRegion">
 			<span class="glyphicon glyphicon-flag"></span> 출발지를 선택해 주세요
 		</div>
 		<div id="searchDiv" class="col-lg-5">
+			<!-- 검색 폼 -->
 			<form id="searchForm">
 				<div id="searchBtn">
 					<button class="btn">
@@ -212,40 +212,47 @@
 					<input name="searchWord" class="form-control">
 				</div>
 				<div id="searchSelect">
+					<!-- 제목, 태그 중 선택 -->
 					<select name="searchKey" class="form-control">
 						<option value="title" selected="selected">제목</option>
 						<option value="tag">태그</option>
 					</select>
 				</div>
+				<!-- 지역 정보 저장용 input -->
 				<input type="hidden" name="region" value="${param.region }">
 			</form>
 		</div>
 		<div id="regionBtns">
-			<input type="hidden" name="region" id="region"> <a
-				href="list.do?searchKey=${param.searchKey }&searchWord=${param.searchWord}"
-				class="btn btn-primary" data-region="all">전 지역</a> <a
-				href="list.do?searchKey=${param.searchKey }&searchWord=${param.searchWord}&region=도심권"
-				class="btn btn-info" data-region="center">도심권</a> <a
-				href="list.do?searchKey=${param.searchKey }&searchWord=${param.searchWord}&region=서북권"
-				class="btn btn-info" data-region="west-north">서북권</a> <a
-				href="list.do?searchKey=${param.searchKey }&searchWord=${param.searchWord}&region=동북권"
-				class="btn btn-info" data-region="east-north">동북권</a> <a
-				href="list.do?searchKey=${param.searchKey }&searchWord=${param.searchWord}&region=서남권"
-				class="btn btn-info" data-region="west-south">서남권</a> <a
-				href="list.do?searchKey=${param.searchKey }&searchWord=${param.searchWord}&region=동남권"
-				class="btn btn-info" data-region="east-south">동남권</a> <input
-				type="checkbox" id="closed" name="closed"><label
-				for="closed">마감된 투어 제외</label>
+			<!-- 지역별 조회 버튼 : 검색정보 유지-->
+			<input type="hidden" name="region" id="region">
+			<a href="list.do?searchKey=${param.searchKey }&searchWord=${param.searchWord}"
+				class="btn btn-primary" data-region="all">전 지역</a>
+			<a href="list.do?searchKey=${param.searchKey }&searchWord=${param.searchWord}&region=도심권"
+				class="btn btn-info" data-region="center">도심권</a>
+			<a href="list.do?searchKey=${param.searchKey }&searchWord=${param.searchWord}&region=서북권"
+				class="btn btn-info" data-region="west-north">서북권</a>
+			<a href="list.do?searchKey=${param.searchKey }&searchWord=${param.searchWord}&region=동북권"
+				class="btn btn-info" data-region="east-north">동북권</a>
+			<a href="list.do?searchKey=${param.searchKey }&searchWord=${param.searchWord}&region=서남권"
+				class="btn btn-info" data-region="west-south">서남권</a>
+			<a href="list.do?searchKey=${param.searchKey }&searchWord=${param.searchWord}&region=동남권"
+				class="btn btn-info" data-region="east-south">동남권</a>
+			<!-- 마감된 투어 포함여부 체크박스 -->
+			<input type="checkbox" id="closed" name="closed">
+			<label for="closed">마감된 투어 제외</label>
 		</div>
 		<div id="searchArray">
+		<!-- 정렬 기능 -->
 			<span class="pull-right"> <span id="arrayByHit">조회수순</span> |
 				<span id="arrayByRegdate">등록일순</span></span>
 		</div>
 
 		<div id="listDiv">
+			<!-- 해당 조건의 투어가 없을 경우 -->
 			<c:if test="${list == null || list.size() == 0}">
 				<h2>해당 조건으로 조회된 투어가 없습니다.</h2>
 			</c:if>
+			<!-- 있을 경우 forEach -->
 			<c:forEach items="${list }" var="vo">
 				<div class="eachTour col-lg-3">
 					<img class="thumbnailImg" src="${vo.thumbnail }" width="247.5px"
@@ -258,6 +265,7 @@
 						<div class="tourDescription">${vo.description }</div>
 					</div>
 					<div class="tags">
+						<!-- tagList로 forEach -->
 						<c:forEach items="${vo.tagList }" var="tag">
 							<span class="eachTag" data-tag="${tag }">#${tag }</span>
 						</c:forEach>
@@ -265,8 +273,6 @@
 				</div>
 			</c:forEach>
 		</div>
-
 	</div>
-
 </body>
 </html>

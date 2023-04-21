@@ -9,11 +9,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="list" resultType="com.seoullo.tour.vo.TourVO">
 		<include refid="basic" />
 		<include refid="region" />
-		<include refid="closed" />
 		ORDER BY gradeNo desc, regDate desc
 	</select>
 
 	<sql id="basic">
+		<!-- 태그로 검색하지 않는 경우 -->
 		<if test="tag == null || tag == ''">
 			SELECT t.no, t.hit, t.status, t.type, t.regdate, t.title, t.description, t.thumbnail, m.gradeNo
 			FROM
@@ -24,6 +24,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				AND t.title LIKE '%'||#{title}||'%'
 			</if>
 		</if>
+		<!-- 태그로 검색하는 경우 -->
 		<if test="tag != null">
 			<if test="tag != ''">
 				SELECT t.no, t.hit, t.status,
@@ -38,13 +39,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</if>
 	</sql>
 
-	<sql id="closed">
-		<if test="closed == 0">
-			AND t.status <![CDATA[<>]]>
-			'마감'
-		</if>
-	</sql>
-
+	<!-- region 값이 있는 경우 지역 조건절 -->
 	<sql id="region">
 		<if test="region != null || region == ''">
 			<if test="region == '도심권'">

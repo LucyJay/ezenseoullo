@@ -21,6 +21,7 @@ public class TourVO {
 	private List<String> tagList;
 	private List<String> checkpointList;
 
+	// 조회수순 정렬기준
 	public static Comparator<TourVO> byHit = new Comparator<TourVO>() {
 
 		@Override
@@ -29,6 +30,7 @@ public class TourVO {
 		}
 	};
 
+	// 등록일순 정렬기준
 	public static Comparator<TourVO> byRegdate = new Comparator<TourVO>() {
 
 		@Override

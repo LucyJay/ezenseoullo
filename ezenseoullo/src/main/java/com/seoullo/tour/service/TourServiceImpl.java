@@ -30,8 +30,10 @@ public class TourServiceImpl implements TourService {
 	public static String uploadPath;
 
 	@Override
-	public List<TourVO> list(String tag, String title, String region, int closed) {
-		List<TourVO> list = mapper.list(tag, title, region, closed);
+	public List<TourVO> list(String tag, String title, String region) {
+		// 해당 검색조건으로 투어 리스트를 가져온 후
+		List<TourVO> list = mapper.list(tag, title, region);
+		// 각 투어의 태그리스트를 세팅한다(리스트에서 태그가 보이기 때문)
 		for (TourVO vo : list) {
 			vo.setTagList(mapper.taglist(vo.getNo()));
 		}

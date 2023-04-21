@@ -7,7 +7,7 @@ import com.webjjang.util.PageObject;
 
 public interface TourService {
 
-	public List<TourVO> list(String tag, String title, String region, int closed);
+	public List<TourVO> list(String tag, String title, String region);
 
 	public List<TourVO> listByGuide(String id);
 	

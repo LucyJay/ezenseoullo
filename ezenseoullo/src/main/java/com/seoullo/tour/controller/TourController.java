@@ -47,27 +47,25 @@ public class TourController {
 
 		if (loginVO != null) {
 			Integer grade = loginVO.getGradeNo();
-
+			
 			// 가이드 등급일 경우 가이드 본인의 리스트로 이동
 			if (grade != null && (grade == 2 || grade == 3)) {
 				String id = loginVO.getId();
 				model.addAttribute("list", service.listByGuide(id));
 				return "tour/listByGuide";
-
 			}
 		}
-		// 가이드 등급이 아닐 경우 일반적인 전체 리스트로 이동
-
-		// key에 태그, word에 제목 검색어 입력
+		// 가이드 등급이 아닐 경우 일반적인 전체 리스트로 이동  + region에 지역 조건 넣음
+		// 검색 기능: searchKey에 태그인지 제목인지 정하고, searchWord에 검색할 단어 입력
 		if (searchWord != null && searchWord != "") {
-			if (searchKey.equals("title"))
-				model.addAttribute("list", service.list(null, searchWord, region, 1));
-			else if (searchKey.equals("tag"))
-				model.addAttribute("list", service.list(searchWord, null, region, 1));
-			else
-				model.addAttribute("list", service.list(null, null, region, 1));
+			if (searchKey.equals("title")) // 제목 검색
+				model.addAttribute("list", service.list(null, searchWord, region));
+			else if (searchKey.equals("tag")) // 태그 검색
+				model.addAttribute("list", service.list(searchWord, null, region));
+			else // 검색어 없음
+				model.addAttribute("list", service.list(null, null, region));
 		} else
-			model.addAttribute("list", service.list(null, null, region, 1));
+			model.addAttribute("list", service.list(null, null, region));
 		return "tour/list";
 	}
 

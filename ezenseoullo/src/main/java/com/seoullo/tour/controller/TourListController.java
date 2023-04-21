@@ -78,10 +78,10 @@ public class TourListController {
 		List<TourVO> tourList = null;
 		try {
 			tourList = convert(list);
+			tourList.removeIf(i -> i.getStatus().equals("마감"));
 		} catch (Exception e) {
 			return null;
 		}
-		tourList.removeIf(i -> i.getStatus().equals("마감"));
 		model.addAttribute("list", tourList);
 		return new ResponseEntity<List<TourVO>>(tourList, HttpStatus.OK);
 	}
@@ -90,16 +90,16 @@ public class TourListController {
 	@RequestMapping(value = "/includeClosed.do")
 	public ResponseEntity<List<TourVO>> includeClosed(String searchKey, String searchWord, String region, Model model)
 			throws Exception {
-		List<TourVO> list = service.list(searchKey, searchWord, region, 1);
+		List<TourVO> list = service.list(searchKey, searchWord, region);
 		if (searchWord != null && searchWord != "") {
 			if (searchKey.equals("title"))
-				list = service.list(null, searchWord, region, 1);
+				list = service.list(null, searchWord, region);
 			else if (searchKey.equals("tag"))
-				list = service.list(searchWord, null, region, 1);
+				list = service.list(searchWord, null, region);
 			else
-				list = service.list(null, null, region, 1);
+				list = service.list(null, null, region);
 		} else
-			list = service.list(null, null, region, 1);
+			list = service.list(null, null, region);
 		model.addAttribute("list", list);
 		return new ResponseEntity<List<TourVO>>(list, HttpStatus.OK);
 	}

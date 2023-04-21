@@ -141,8 +141,11 @@
 </head>
 <body>
 	<div class="container">
-
+	
+		<!-- 가이드 리스트는 닉네임 출력 -->
 		<h1>${login.nickName }님이 등록한 투어</h1>
+		
+		<!-- 투어 등록 버튼 -->
 		<div id="writeBtnDiv">
 			<a href="write.do" class="btn btn-primary">신규 투어 등록하기</a>
 		</div>
@@ -152,9 +155,11 @@
 		</div>
 
 		<div id="listDiv">
+			<!-- 조회결과가 없는 경우 -->
 			<c:if test="${list == null || list.size() == 0}">
 				<h2>등록한 투어가 없습니다.</h2>
 			</c:if>
+			<!-- 있는 경우 forEach -->
 			<c:forEach items="${list }" var="vo">
 				<div class="eachTour col-lg-3">
 					<img class="thumbnailImg" src="${vo.thumbnail }" width="247.5px"
@@ -169,6 +174,7 @@
 							<span class="eachTag" data-tag="${tag }">#${tag }</span>
 						</c:forEach>
 					</div>
+					<!-- 투어별 예약현황, 수정, 모집종료 버튼 -->
 					<div id="eachBtns" style="padding-left: 42px;">
 						<a href="/book/list.do?tourNo=${vo.no }" class="btn btn-xs btn-default">예약현황</a> <a
 							href="update.do?no=${vo.no }" class="btn btn-xs btn-default">수정</a>
@@ -178,8 +184,6 @@
 				</div>
 			</c:forEach>
 		</div>
-
 	</div>
-
 </body>
 </html>
