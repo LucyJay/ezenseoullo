@@ -22,22 +22,18 @@ $(function() {
 
 		var options = {
 			center : meetLatlng, // 지도의 중심좌표
-			level : 3
-		// 지도의 확대 레벨
+			level : 3 // 지도의 확대 레벨
 		};
 
-		// 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
+		// 지도 생성
 		var map = new kakao.maps.Map(container, options);
 
-		// 마커 이미지의 이미지 주소입니다
+		// 마커 이미지 설정
 		var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
-
-		// 마커 이미지의 이미지 크기 입니다
 		var imageSize = new kakao.maps.Size(24, 35);
-		// 마커 이미지를 생성합니다    
 		var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
 
-		//마커 생성
+		// 마커 생성
 		var meetMarker = new kakao.maps.Marker({
 			map : map,
 			position : meetLatlng,
@@ -313,7 +309,7 @@ legend.bookInfo {
 <body>
 	<div class="container">
 	
-<!-- 		메인  -->
+		<!-- 메인에 들어가는 정보 및 이미지  -->
 		<div class="main"
 			style="width: 100%; height: 500px;">
 			<div id="region" class="col-md-2">${tourvo.region} | ${tourvo.type }</div>
@@ -323,8 +319,9 @@ legend.bookInfo {
 			</div>
 		</div>
 		
-<!-- 		왼쪽 DIV -->
+		<!-- 왼쪽 DIV -->
 		<div id="leftDiv">
+			<!-- 탭 부분 -->
 			<ul class="nav nav-tabs" role="tablist">
 				<li class="active"><a data-toggle="tab" href="#basic">기본정보</a></li>
 				<li><a data-toggle="tab" href="#schedule">상세일정</a></li>
@@ -333,8 +330,9 @@ legend.bookInfo {
 			</ul>
 			<div class="tab-content">
 			
-<!-- 				기본정보 탭 -->
+				<!-- 기본정보 탭 -->
 				<div id="basic" class="tab-pane fade in active">
+					<!-- 투어 소개글 및 이미지 -->
 					<div id="tourSubLeft">
 						<div id="tourSubtitle" style="padding-bottom: 15px;">
 							<span style="color: #4B8A08; font-size:xx-large; font-weight: lighter; text-align: justify; ">${tourvo.subtitle }</span>
@@ -347,6 +345,7 @@ legend.bookInfo {
 						</div>
 					</div>
 					<div id="basicSchedule">
+						<!-- 간단일정: 당일 투어일 경우 -->
 						<c:if test="${tourvo.type eq '당일' }">
 							<div class="dayBox">
 								<div class="dayNum">투어코스</div>
@@ -359,6 +358,7 @@ legend.bookInfo {
 								</div>
 							</div>												
 						</c:if>
+						<!-- 간단일정: 1박2일 이상일 경우 며칠짜리 투어인지에 따라 forEach, 그 안에서 다시 forEach를 돌리며 dayNum이 맞는 데이터만 출력 -->
 						<c:if test="${tourvo.type ne '당일' }">
 							<c:forEach var="day" begin="1" end="${tourvo.type.charAt(2)-48 }">
 								<div class="dayBox">
@@ -377,9 +377,11 @@ legend.bookInfo {
 						</c:if>
 					</div>
 					<div id="tourpoint" class="clear">
+						<!-- tourpoint 번호는 1부터 시작하며 forEach마다 1씩 증가 -->
 						<%! int pointNum = 1; %>
 						<c:forEach items="${tourvo.tourpointList }" var="pointvo">
 							<div class="pointBox clear">
+								<!-- tourpoint 번호의 홀수/짝수 여부에 따라 위치와 색상이 달라짐 -->
 								<% if(pointNum % 2 == 1) { %>
 								<div class="pointLeft">
 									<div class="pointImage" style="background-image: url('${pointvo.image }');">
@@ -405,12 +407,14 @@ legend.bookInfo {
 								<% } %>
 							</div>
 						</c:forEach>
+						<!-- 새로고침 시 pointNum이 초기화될 수 있도록 1로 변경해 둠 -->
 						<div class="clear"><% pointNum = 1; %></div>
 					</div>
 				</div>
 				
-<!-- 				상세일정 탭 -->
+				<!-- 상세일정 탭 -->
 				<div id="schedule" class="tab-pane fade">
+					<!-- 간단일정: 기본정보 탭의 basidSchedule div와 동일 -->
 					<div id="scheduleList">
 						<c:if test="${tourvo.type eq '당일' }">
 							<div class="dayBox">
@@ -442,6 +446,7 @@ legend.bookInfo {
 						</c:if>
 						<div class="dayBox"></div>
 					</div>
+					<!-- 출발지 정보 -->
 					<div id="meetInfo">
 						<div id="meetTitle">만나는 장소</div>
 						<div id="meetPlace">▶  ${tourvo.meetPlace }</div>
@@ -453,6 +458,7 @@ legend.bookInfo {
 						</div>
 					</div>
 					<div id="scheduleDetail">
+						<!-- 상세일정 - 당일 투어일 경우 -->
 						<c:if test="${tourvo.type eq '당일' }">
 							<div class="sd-dayNum">투어코스 <span class="pull-right sd-tourTitle">${tourvo.title }</span></div>
 							<div class="sd-schedule">
@@ -476,6 +482,7 @@ legend.bookInfo {
 								</c:forEach>
 							</div>		
 						</c:if>
+						<!-- 상세일정 - 1박2일 이상일 경우 며칠짜리 투어인지에 따라 forEach, 그 안에서 다시 forEach를 돌리며 dayNum이 맞는 데이터만 출력 -->
 						<c:if test="${tourvo.type ne '당일' }">
 							<c:forEach var="day" begin="1" end="${tourvo.type.charAt(2)-48 }">
 								<div class="sd-dayNum">DAY ${day } <span class="pull-right sd-tourTitle">${tourvo.title } ${day }일차</span></div>
@@ -484,8 +491,10 @@ legend.bookInfo {
 										<c:if test="${svo.dayNum eq day }">
 											<div class="sd-each">
 												<div class="schedule-name">
+													<!-- 시간정보가 있는 데이터만 시간 출력 -->
 													<c:if test="${svo.starthour ne null }">
-														<span class="startTime" style="font-size: medium;">${svo.starthour }시 
+														<span class="startTime" style="font-size: medium;">${svo.starthour }시
+														<!-- 0분이면 따로 출력 안 함 --> 
 														<c:if test="${svo.startminute ne 0 }">
 															${svo.startminute }분
 														</c:if>
@@ -504,7 +513,7 @@ legend.bookInfo {
 							</c:forEach>
 						</c:if>
 					</div>
-					
+					<!-- 예약시 주의사항 : ol 태그 안에 추가 -->
 					<div class="well">
 						<ol>
 							<c:forEach items="${tourvo.checkpointList }" var="cpvo">

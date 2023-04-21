@@ -91,12 +91,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		FROM tour WHERE no = #{no}
 	</select>
 
+	<!-- 예약가능일 List -->
 	<select id="viewTourdate"
 		resultType="com.seoullo.tour.vo.TourdateVO">
 		SELECT day, status, maxNum, reserveNum, priceA, priceB FROM
 		tourdate WHERE tourNo = #{no}
 	</select>
 
+	<!-- 일정 List -->
 	<select id="viewSchedule"
 		resultType="com.seoullo.tour.vo.ScheduleVO">
 		SELECT dayNum, scheduleNum, starthour, startminute,
@@ -107,12 +109,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		scheduleNum
 	</select>
 
+	<!-- 투어포인트 List -->
 	<select id="viewTourpoint"
 		resultType="com.seoullo.tour.vo.TourpointVO">
 		SELECT image, title, content FROM tourpoint WHERE tourNo =
 		#{no} ORDER BY no
 	</select>
 
+	<!-- 예약 전 확인사항 List -->
 	<select id="viewCheckpoint" resultType="String">
 		SELECT content FROM
 		checkpoint WHERE tourNo = #{no} ORDER BY no

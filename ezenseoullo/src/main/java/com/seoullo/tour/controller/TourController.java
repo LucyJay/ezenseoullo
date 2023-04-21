@@ -90,7 +90,7 @@ public class TourController {
 		return "tour/write";
 	}
 
-	// 투어 등록 기능
+	// 투어 등록 기능: 모든 입력폼의 정보를 받되 한 name이 여러 개 있을 수 있는 경우 배열로 받음
 	@PostMapping("/write.do")
 	public String write(MultipartFile thumbnailFile, MultipartFile mainImgFile, MultipartFile subImgFile, TourVO vo,
 			String[] day, Integer[] maxNum, Integer[] priceA, Integer[] priceB, Integer[] dayNum, Integer[] starthour,
@@ -103,7 +103,7 @@ public class TourController {
 			vo.setMainImg(upload(path, mainImgFile, request));
 			vo.setSubImg(upload(path, subImgFile, request));
 
-			// tourdateList 세팅
+			// vo에 예약가능일 List 세팅 - 예약가능일 배열의 길이만큼 for문
 			List<TourdateVO> tourdateList = new ArrayList<TourdateVO>();
 			DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			for (int i = 0; i < day.length; i++) {
@@ -116,7 +116,7 @@ public class TourController {
 			}
 			vo.setTourdateList(tourdateList);
 
-			// scheduleList 세팅
+			// vo에 일정 List 세팅
 			List<ScheduleVO> scheduleList = new ArrayList<ScheduleVO>();
 
 			// 며칠까지 있는지: 타입에서 가져옴
@@ -124,14 +124,15 @@ public class TourController {
 			if (!vo.getType().equals("당일")) {
 				maxDay = vo.getType().charAt(2) - 48;
 			}
-			// maxDay마다 for문 돌림
+			// maxDay만큼 for문 돌림
 			for (int i = 1; i <= maxDay; i++) {
 				int scheduleNum = 0;
+				// dayNum이 해당 일차일 때마다 add
 				for (int j = 0; j < dayNum.length; j++) {
 					if (dayNum[j] == i) {
 						ScheduleVO scheduleVO = new ScheduleVO();
-						scheduleVO.setDayNum(dayNum[j]);
-						scheduleVO.setScheduleNum(++scheduleNum);
+						scheduleVO.setDayNum(dayNum[j]); //일차
+						scheduleVO.setScheduleNum(++scheduleNum); //일차별 순서
 						scheduleVO.setStarthour(starthour[j]);
 						scheduleVO.setStartminute(startminute[j]);
 						scheduleVO.setSchedule(schedule[j]);
@@ -142,7 +143,7 @@ public class TourController {
 			}
 			vo.setScheduleList(scheduleList);
 
-			// tourpoint 세팅
+			// vo에 투어포인트 List 세팅 - 배열의 길이만큼 for문
 			List<TourpointVO> tourpointList = new ArrayList<TourpointVO>();
 			for (int i = 0; i < pointTitle.length; i++) {
 				TourpointVO tourpointVO = new TourpointVO();
@@ -153,18 +154,19 @@ public class TourController {
 			}
 			vo.setTourpointList(tourpointList);
 
-			// tag 세팅
+			// vo에 태그 List 세팅 : 하나의 String을 반점으로 split
 			List<String> tagList = Arrays.asList(tags.split(","));
 			Collections.reverse(tagList);
 			vo.setTagList(tagList);
 
-			// checkpoint 세팅
+			// vo에 예약 시 주의사항 List 세팅 : 배열의 길이만큼 for문 
 			List<String> checkpointList = new ArrayList<String>();
 			for (int i = 0; i < checkpoint.length; i++) {
 				checkpointList.add(checkpoint[i]);
 			}
 			vo.setCheckpointList(checkpointList);
 
+			// DB 등록 처리
 			service.write(vo);
 		} catch (ParseException e) {
 			System.out.println("parse 안됨");

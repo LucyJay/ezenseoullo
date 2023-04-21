@@ -57,33 +57,45 @@ public class TourServiceImpl implements TourService {
 		vo.setTourpointList(mapper.viewTourpoint(no));
 		vo.setCheckpointList(mapper.viewCheckpoint(no));
 		vo.setTagList(mapper.taglist(vo.getNo()));
-		if (inc == 1)
+		if (inc == 1) // inc값에 따라 조회수 증가 실행
 			mapper.increaseHit(no);
 		return vo;
 	}
 
 	@Override
 	public Integer write(TourVO vo) {
+		// tour 테이블에 insert하며 vo.no에 새로 추가된 투어번호 저장 
 		mapper.write(vo);
 		Long tourNo = vo.getNo();
+		
+		// tourdate 테이블에 insert
 		for (TourdateVO tourdateVO : vo.getTourdateList()) {
 			tourdateVO.setTourNo(tourNo);
 			mapper.writeTourdate(tourdateVO);
 		}
+		
+		// schedule 테이블에 insert
 		for (ScheduleVO scheduleVO : vo.getScheduleList()) {
 			scheduleVO.setTourNo(tourNo);
 			mapper.writeSchedule(scheduleVO);
 		}
+		
+		// tourpoint 테이블에 insert
 		for (TourpointVO tourpointVO : vo.getTourpointList()) {
 			tourpointVO.setTourNo(tourNo);
 			mapper.writeTourpoint(tourpointVO);
 		}
+		
+		// tag 테이블에 insert
 		for (String tag : vo.getTagList()) {
 			mapper.writeTag(tourNo, tag);
 		}
+		
+		// checkpoint 테이블에 insert
 		for (String checkpoint : vo.getCheckpointList()) {
 			mapper.writeCheckpoint(tourNo, checkpoint);
 		}
+		
 		return 1;
 	}
 

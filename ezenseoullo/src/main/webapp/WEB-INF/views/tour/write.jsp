@@ -18,19 +18,15 @@
 
 			var options = {
 				center : meetLatlng, // 지도의 중심좌표
-				level : 3
-			// 지도의 확대 레벨
+				level : 3 // 지도의 확대 레벨
 			};
 
-			// 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
+			// 지도 생성
 			var map = new kakao.maps.Map(container, options);
 
-			// 마커 이미지의 이미지 주소입니다
+			// 마커 이미지 설정
 			var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
-
-			// 마커 이미지의 이미지 크기 입니다
 			var imageSize = new kakao.maps.Size(24, 35);
-			// 마커 이미지를 생성합니다    
 			var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
 
 			//마커 생성
@@ -62,7 +58,6 @@
 		//지도 이외 기능
 		
 		//미리보기
-		
 		function preview() {
 			let formdata = new FormData($("#form")[0]);
 
@@ -77,16 +72,27 @@
 				}
 			});
 		}
-		
-		//폼 양식 개수 동적 변경
 
+		// 예약가능일의 All 버튼 - 전체 폼에 첫 번째 칸의 값 적용
+		function changeAll() {
+			$("input[name='maxNum']").val($("#firstMaxNum").val());
+			$("input[name='priceA']").val($("#firstPA").val());
+			$("input[name='priceB']").val($("#firstPB").val());
+		}
+		
+		// 폼 양식 개수 동적 변경 스크립트들
+
+		// 일정, 포인트용 인덱스
 		let tdNum = 1;
 		let pointNum = 1;
+
+		// 삽입 위치
 		let dayArea = $("#sc-eachDiv");
 		let tdArea = $("#td-table");
 		let tpArea = $("#tp-div");
 		let cpArea = $("#cp-each");
 
+		// 일차 추가 : 투어 종류 선택 시 동작(ex. 1박2일이면 2일차까지, 3박4일이면 4일차까지 폼이 추가됨)
 		function addDay(num) {
 			let new_day = document.createElement('div');
 			new_day.setAttribute('class', 'sc-each');
@@ -101,11 +107,8 @@
 			dayArea.append(new_day);
 
 		}
-		function changeAll() {
-			$("input[name='maxNum']").val($("#firstMaxNum").val());
-			$("input[name='priceA']").val($("#firstPA").val());
-			$("input[name='priceB']").val($("#firstPB").val());
-		}
+
+		// 예약가능일 추가 : 추가 버튼 클릭 시 동작
 		function add_td() {
 			tdNum = tdNum + 1;
 			let new_td = document.createElement('tr')
@@ -117,6 +120,8 @@
 				+ "<td><button data-td='" + tdNum + "' type='button' class='td-deleteBtn btn btn-xs btn-danger'>X</button></td>";
 			tdArea.append(new_td);
 		}
+
+		// 일정 추가 : 매개변수로 들어온 일차에 일정 폼 추가
 		function add_sc(dayNum) {
 			let scArea = $("#sc-info"+dayNum);
 			let new_sc = document.createElement('div');
@@ -129,6 +134,8 @@
 				+ "<input name='schDescription' maxlength='200' class='form-control'></div>";
 			scArea.append(new_sc);
 		}
+
+		// 투어포인트 추가 : 추가 버튼 클릭 시 동작
 		function add_tp() {
 			pointNum = pointNum + 1;
 			let new_tp = document.createElement('div');
@@ -140,6 +147,8 @@
 				 + "<div class='form-group'><label for='pointImageFile'>이미지</label><input name='pointImageFile' type='file' required='required'></div>";
 			tpArea.append(new_tp);
 		}
+
+		// 예약 전 주의사항 추가 : 추가 버튼 클릭 시 동작
 		function add_cp() {
 			let new_cp = document.createElement('div');
 			new_cp.setAttribute('class', 'form-group');
@@ -147,9 +156,12 @@
 			cpArea.append(new_cp);
 		}
 
+		// 투어 종류 선택 시 종류에 맞게 일차 폼 추가(ex. 1박2일이면 2일차까지, 3박4일이면 4일차까지)
 		$("#typeSelect").change(function() {
+			//선택한 종류의 일차 데이터
 			let type = $(this).find("option:selected").data("count");
 
+			// 당일 기준으로 다시 세팅한 후 addDay로 추가
 			dayArea.html("<div class='sc-each'><div id='sc-day1' class='sc-dayNum'><span class='subtitle'>1일차</span>"
 				+ "<button type='button' class='sc-addBtn btn btn-xs btn-info' data-daynum='1'>추가</button></div><div id='sc-info1'>"
 				+ "<div class='sc-eachInfo'><input type='hidden' name='dayNum' value='1'><div class='form-group'><label for='starthour'>시간</label>"
@@ -165,52 +177,64 @@
 				}
 			}
 
+			// 새로 삽입된 [추가] 버튼에 클릭 이벤트
 			$(".sc-addBtn").on("click", function(){
 				let dayNum = $(this).data("daynum");
 				add_sc(dayNum);
 			});
 		});
 
+		// 예약가능일 1행의 All 버튼
 		$("#td-changeAllBtn").on("click", function() {
 			changeAll();
 		});
 
+		// 일정 추가 버튼 : 버튼이 가진 일차 data를 매개변수로 넘김
 		$(".sc-addBtn").on("click", function(){
 			let dayNum = $(this).data("daynum");
 			add_sc(dayNum);
 		});
-		
+
+		// 예약가능일 추가 버튼
 		$("#td-addBtn").click(function(){
 			add_td();
-			
+
+			// 새로 삽입된 x 버튼에 클릭 이벤트 추가
 			$(".td-deleteBtn").on("click", function() {
 				let tdno = $(this).data("td");
 				$("#td"+tdno).remove();
 			});
 
 		});
-		
+
+		// 예약가능일 삭제 버튼
 		$(".td-deleteBtn").on("click", function() {
 			let tdno = $(this).data("td");
 			$("#td"+tdno).remove();
 		});
-		
+
+		// 투어포인트 추가 버튼
 		$("#tp-addBtn").click(function(){
 			add_tp();
 		});
-		
+
+		// 예약 시 주의사항 추가 버튼
 		$("#cp-addBtn").click(function(){
 			add_cp();
 		});
+
+		// 미리보기 버튼 클릭 이벤트
 		$("#previewBtn").click(function() {
-			//지도의 좌표 입력
+			// 지도 마커 위치의 좌표를 받아 hidden input에 값 세팅
 			$("#meetLat").val(meetLatlng.getLat());
 			$("#meetLng").val(meetLatlng.getLng());
 			preview();
 			return false;
 		});
+
+		// 폼 제출 버튼
 		$("#submitBtn").click(function() {
-			//온갖 검사...
+			// 지도 마커 위치의 좌표를 받아 hidden input에 값 세팅
 			$("#meetLat").val(meetLatlng.getLat());
 			$("#meetLng").val(meetLatlng.getLng());
 			return true;
@@ -306,6 +330,7 @@ label {
 				<div id="topTitle">
 					<h1>투어 등록</h1>
 				</div>
+				<!-- 미리보기, 등록 버튼 -->
 				<div id="topBtns">
 					<button type="button" class="btn btn-info" id="previewBtn">미리보기</button>
 					<button class="btn btn-primary" id="submitBtn">등록</button>
@@ -319,6 +344,7 @@ label {
 				<div class="inputDiv">
 					<input type="hidden" name="guideId" value=${login.getId() } required="required">
 					<div class="form-group halfForm">
+					<!-- 지역 선택 -->
 						<label for="region">지역</label>
 						<select name="region" class="form-control halfWidth" required="required">
 							<optgroup label="도심권">
@@ -357,6 +383,7 @@ label {
 								<option>강동구</option>
 							</optgroup>
 						</select>
+						<!-- 종류 선택 : 선택 시 일정 부분의 일차 개수가 변경됨 -->
 						<label for="type" style="margin-left: 30px;">종류</label>
 						<select name="type" id="typeSelect" class="form-control halfWidth" required="required">
 							<option data-count="1" selected="selected">당일</option>
@@ -368,6 +395,7 @@ label {
 						</select>
 						<div class="clear"></div>
 					</div>
+					<!-- 제목, 설명, 태그, 썸네일, 메인이미지, 소제목, 소개글, 서브이미지 입력 -->
 					<div class="form-group">
 						<label for="title">제목</label>
 						<input name="title" class="form-control" required="required" maxlength="30" placeholder="투어명을 입력하세요">
@@ -413,6 +441,7 @@ label {
 			</div>
 			<div class="categoryDiv">
 				<div class="categoryTitleDiv">
+					<!-- 예약가능일 관련 정보(예약가능날짜, 최대인원, 가격정보) 입력폼 / 추가 버튼으로 행 추가, 첫 행에는 All 버튼, 이후로는 X 버튼 -->
 					<span class="categoryTitle">예약가능일</span><br>
 					<button type="button" id="td-addBtn" class="btn btn-xs btn-info">추가</button>
 				</div>
@@ -448,6 +477,7 @@ label {
 					<span class="categoryTitle">투어일정</span>
 				</div>
 				<div class="inputDiv">
+					<!-- 출발지 정보 입력: 출발지 정보 입력 및 지도에서 마커를 드래그해 위치 입력 -->
 					<div id="meetDiv">
 						<div class="form-group">
 							<label for="meetPlace">출발지</label>
@@ -466,6 +496,7 @@ label {
 					</div>
 					<div id="sc-eachDiv">
 						<div class="sc-each">
+						<!-- 일정 입력 폼 : 일정은 필수 입력이나 시간 및 설명은 반드시 적지 않아도 됨, 추가 버튼으로 일차마다 폼 추가 가능 -->
 							<div id="sc-day1" class="sc-dayNum">
 								<span class="subtitle">1일차</span>
 								<button type="button" class="sc-addBtn btn btn-xs btn-info" data-daynum="1">추가</button>
@@ -492,6 +523,7 @@ label {
 				<div class="clear"></div>
 			</div>
 			<div class="categoryDiv">
+				<!-- 투어포인트(제목, 설명, 이미지 모두 필수) 입력 : 추가 버튼으로 폼 추가 -->
 				<div class="categoryTitleDiv">
 					<span class="categoryTitle">투어포인트</span><br>
 					<button type="button" id="tp-addBtn" class="btn btn-xs btn-info">추가</button>
@@ -518,6 +550,7 @@ label {
 				<div class="clear"></div>
 			</div>
 			<div class="categoryDiv">
+				<!-- 예약 시 주의사항 입력 : 추가 버튼으로 폼 추가 -->
 				<div class="categoryTitleDiv">
 					<span class="categoryTitle">예약 시<br>주의사항</span><br>
 					<button type="button" id="cp-addBtn" class="btn btn-xs btn-info">추가</button>
