@@ -47,4 +47,6 @@
 
 투어 상세보기(기본정보 탭, 상세보기 탭) : <https://github.com/LucyJay/ezenseoullo/wiki/2.-투어-상세보기>
 
-투어 등록 : <https://github.com/LucyJay/ezenseoullo/wiki/3.-투어->
+투어 등록 : <https://github.com/LucyJay/ezenseoullo/wiki/3.-투어-등록>
+
+투어 수정 : <https://github.com/LucyJay/ezenseoullo/wiki/4.-투어-수정>
