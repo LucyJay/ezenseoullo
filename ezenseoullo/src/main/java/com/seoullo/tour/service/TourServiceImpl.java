@@ -103,9 +103,12 @@ public class TourServiceImpl implements TourService {
 	public Integer update(TourVO vo, boolean changeImage, boolean changeSchedule, boolean changeTourpoint,
 			boolean changeTag, boolean changeCheckpoint) {
 		Long tourNo = vo.getNo();
+		// tour 테이블 중 이미지가 아닌 값은 기본적으로 update함
 		mapper.updateTour(vo);
+		// tour 테이블 중 이미지 정보는 변경 시에만 update함
 		if (changeImage)
 			mapper.updateImage(vo);
+		// schedule 테이블 변경 시 전체 delete 후 다시 insert
 		if (changeSchedule) {
 			mapper.deleteSchedule(tourNo);
 			for (ScheduleVO scheduleVO : vo.getScheduleList()) {
@@ -113,6 +116,7 @@ public class TourServiceImpl implements TourService {
 				mapper.writeSchedule(scheduleVO);
 			}
 		}
+		// tourpoint 테이블 변경 시 전체 delete 후 다시 insert
 		if (changeTourpoint) {
 			mapper.deleteTourpoint(tourNo);
 			for (TourpointVO tourpointVO : vo.getTourpointList()) {
@@ -120,12 +124,14 @@ public class TourServiceImpl implements TourService {
 				mapper.writeTourpoint(tourpointVO);
 			}
 		}
+		// tag 테이블 변경 시 전체 delete 후 다시 insert
 		if (changeTag) {
 			mapper.deleteTag(tourNo);
 			for (String tag : vo.getTagList()) {
 				mapper.writeTag(tourNo, tag);
 			}
 		}
+		// checkpoint 테이블 변경 시 전체 delete 후 다시 insert
 		if (changeCheckpoint) {
 			mapper.deleteCheckpoint(tourNo);
 			for (String checkpoint : vo.getCheckpointList()) {

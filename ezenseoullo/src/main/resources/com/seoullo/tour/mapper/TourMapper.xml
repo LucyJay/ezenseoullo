@@ -182,7 +182,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		#{checkpoint})
 	</insert>
 
-	<!-- 투어 수정 : 투어일반, 일반이미지는 수정 / 스케줄, 투어포인트, 태그, 체크포인트는 삭제 후 write 이용 -->
+	<!-- 투어 수정 : tour 테이블은 update -->
 	<update id="updateTour">
 		UPDATE tour SET description = #{description},
 		subtitle=#{subtitle}, content= #{content}, meetPlace = #{meetPlace},
@@ -194,6 +194,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		#{mainImg}, subImg = #{subImg} WHERE no = #{no}
 	</update>
 
+	<!-- schedule, tourpoint, tag, checkpoint는 delete 후 insert -->
+	<!-- insert는 투어 등록에서 쓰는 쿼리와 동일 -->
 	<delete id="deleteSchedule">
 		DELETE FROM schedule WHERE tourNo = #{tourNo}
 	</delete>

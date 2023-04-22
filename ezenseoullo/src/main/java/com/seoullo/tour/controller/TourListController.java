@@ -157,10 +157,10 @@ public class TourListController {
 			String[] checkpoint, HttpServletRequest request, HttpSession session) throws Exception {
 		try {
 			TourVO oldVO = null;
-			if (vo.getNo() != null) {
+			if (vo.getNo() != null) { // 수정 시 formdata에 no 존재 - 이미지를 나타내기 위해 기존 데이터를 불러옴
 				oldVO = service.view(vo.getNo(), 0);
 			}
-			// thumbnail, mainImg, subImg 저장 처리
+			// thumbnail, mainImg, subImg 저장 처리 - 수정 시에는 이미지가 없을 경우 기존 데이터로 세팅
 			vo.setThumbnail(TourController.upload(path, thumbnailFile, request));
 			if (oldVO != null && vo.getThumbnail().equals("/upload/tour/noImage.jpg"))
 				vo.setThumbnail(oldVO.getThumbnail());
@@ -170,8 +170,7 @@ public class TourListController {
 			vo.setSubImg(TourController.upload(path, subImgFile, request));
 			if (oldVO != null && vo.getSubImg().equals("/upload/tour/noImage.jpg"))
 				vo.setSubImg(oldVO.getSubImg());
-			
-			System.out.println(vo);
+
 			// tourdateList 세팅
 			List<TourdateVO> tourdateList = new ArrayList<TourdateVO>();
 			DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -216,8 +215,12 @@ public class TourListController {
 			for (int i = 0; i < pointTitle.length; i++) {
 				TourpointVO tourpointVO = new TourpointVO();
 				tourpointVO.setImage(TourController.upload(path, pointImageFile[i], request));
-				if (oldVO != null && tourpointVO.getImage().equals("/upload/tour/noImage.jpg"))
-					tourpointVO.setImage(oldVO.getTourpointList().get(i).getImage());
+				// 이미지 저장 처리 - 수정 시에는 이미지가 없을 경우 기존 데이터로 세팅
+				try {
+					if (oldVO != null && tourpointVO.getImage().equals("/upload/tour/noImage.jpg"))
+						tourpointVO.setImage(oldVO.getTourpointList().get(i).getImage());
+				} catch (Exception e) { // 투어포인트 추가로 인한 Index 범위 오류는 그냥 넘어감
+				}
 				tourpointVO.setTitle(pointTitle[i]);
 				tourpointVO.setContent(pointContent[i]);
 				tourpointList.add(tourpointVO);
@@ -237,7 +240,7 @@ public class TourListController {
 		} catch (ParseException e) {
 			System.out.println("parse 안됨");
 		}
-		session.setAttribute("vo", vo);
+		session.setAttribute("vo", vo); // 미리보기 창에서도 불러올 수 있도록 세션에 vo를 저장
 		return new ResponseEntity<TourVO>(vo, HttpStatus.OK);
 	}
 

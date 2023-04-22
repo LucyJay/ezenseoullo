@@ -19,19 +19,15 @@
 
 			var options = {
 				center : meetLatlng, // 지도의 중심좌표
-				level : 3
-			// 지도의 확대 레벨
+				level : 3 // 지도의 확대 레벨
 			};
 
-			// 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
+			// 지도 생성
 			var map = new kakao.maps.Map(container, options);
 
-			// 마커 이미지의 이미지 주소입니다
+			// 마커 이미지 설정
 			var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
-
-			// 마커 이미지의 이미지 크기 입니다
 			var imageSize = new kakao.maps.Size(24, 35);
-			// 마커 이미지를 생성합니다    
 			var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
 
 			//마커 생성
@@ -308,6 +304,7 @@ label {
 				<div id="topTitle">
 					<h1>투어 수정</h1>
 				</div>
+				<!-- 미리보기, 되돌리기, 수정 버튼  -->
 				<div id="topBtns">
 					<button type="button" class="btn btn-info" id="previewBtn">미리보기</button>
 					<button type="reset" class="btn btn-default">되돌리기</button>
@@ -320,6 +317,7 @@ label {
 					<span class="categoryTitle">기본정보</span>
 				</div>
 				<div class="inputDiv">
+					<!-- 지역, 종류는 수정 불가 -->
 					<div class="form-group halfForm">
 						<label for="region">지역</label>
 						<select name="region" class="form-control halfWidth" required="required">
@@ -336,6 +334,7 @@ label {
 						</select>
 						<div class="clear"></div>
 					</div>
+					<!-- 첨부파일 외 데이터들은 기존  데이터 값으로 미리 세팅 -->
 					<div class="form-group">
 						<label for="title">제목</label>
 						<input name="title" class="form-control" required="required" maxlength="30" readonly="readonly" value="${tourvo.title }">
@@ -392,6 +391,7 @@ label {
 							<th>소인가격</th>
 							<th></th>
 						</tr>
+						<!-- 예약가능일은 수정할 수 없게 readonly 처리 -->
 						<c:forEach items="${tourvo.tourdateList }" var="tdvo">
 							<tr>
 								<td><input name="day" type="date" class="form-control" readonly="readonly" value="${tdvo.status }"></td>
@@ -426,14 +426,18 @@ label {
 						<input id="meetLng" name="meetLng" type="hidden">
 					</div>
 					<div id="sc-eachDiv">
+						<!-- scd에 일차를 저장하고, 한 일차의 forEach가 끝날 때마다 ++ -->
 						<%! int scd = 1; %>
+						<!-- 일차별 List의 List를 가지고 forEach -->
 						<c:forEach items="${scList }" var="scDay">
 							<div class="sc-each">
+								<!-- 일차별로 id를 만들어 [추가]버튼 script에 사용 -->
 								<div id="sc-day<%=scd %>" class="sc-dayNum">
 									<span class="subtitle"><%=scd %>일차</span>
 									<button type="button" class="sc-addBtn btn btn-xs btn-info" data-daynum="<%=scd %>">추가</button>
 								</div>
 								<div id="sc-info<%=scd %>">
+									<!-- 하나의 일차 List 내에서 forEach하며 일정 데이터를 꺼냄 -->
 									<c:forEach items="${scDay }" var="vo">
 										<div class="sc-eachInfo">
 											<input type="hidden" name="dayNum" value="${vo.dayNum }">
@@ -454,6 +458,7 @@ label {
 							</div>
 							<% scd++; %>
 						</c:forEach>
+						<!-- 새로고침 시에도 값이 제대로 나오도록 scd를 1로 초기화 -->
 						<% scd = 1; %>
 					</div>
 				</div>
@@ -465,9 +470,11 @@ label {
 					<button type="button" id="tp-addBtn" class="btn btn-xs btn-info">추가</button>
 				</div>
 				<div id = "tp-div" class="inputDiv">
+					<!-- 투어포인트 번호를 tpn을 이용해 표기하며, forEach마다 ++ -->
 					<%! int tpn = 1; %>
 					<% tpn = 1; %>
 					▼ 투어포인트에 변경사항이 있을 시 이미지는 모두 다시 첨부해 주세요. 그렇지 않을 경우 투어포인트 변경이 적용되지 않습니다.
+					<!-- vo 안의 tourpointList로 forEach -->
 					<c:forEach items="${tourvo.tourpointList }" var="tpvo">
 						<div class="tp-each">
 							<div class="pointNum">
@@ -497,6 +504,7 @@ label {
 				</div>
 				<div class="inputDiv">
 					<div id="cp-each">
+						<!-- vo 안의 checkpointList로 forEach -->
 						<c:forEach items="${tourvo.checkpointList }" var="cpvo">
 							<div class="form-group">
 								<input name="checkpoint" maxlength="300" class="form-control cp-input" required="required" value="${cpvo }">
