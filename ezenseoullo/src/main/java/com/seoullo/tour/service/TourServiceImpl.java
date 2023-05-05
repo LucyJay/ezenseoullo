@@ -155,17 +155,18 @@ public class TourServiceImpl implements TourService {
 	public void deleteTourFiles() {
 		if (uploadPath != null) {
 			List<String> dbList = new ArrayList<String>();
-			dbList.addAll(mapper.tourDBFiles1());
+			dbList.addAll(mapper.tourDBFiles1()); // DB에 존재하는 파일을 모두 리스트화
 			dbList.addAll(mapper.tourDBFiles2());
 			dbList.addAll(mapper.tourDBFiles3());
 			dbList.addAll(mapper.tourDBFiles4());
 			List<Path> dbPathList = dbList.stream()
 					.map(str -> Paths.get(uploadPath + str.substring(str.lastIndexOf("/") + 1, str.length())))
-					.collect(Collectors.toList());
-			File systemDir = Paths.get(uploadPath).toFile();
+					.collect(Collectors.toList()); // Path의 List로 변경
+			File systemDir = Paths.get(uploadPath).toFile(); // 파일 저장 폴더 
+			// 실제 폴더 중 DB 파일 리스트에 없는 파일만 추출
 			File[] deleteFiles = systemDir.listFiles(file -> dbPathList.contains(file.toPath()) == false);
 			for (File f : deleteFiles)
-				f.delete();
+				f.delete(); // DB에 없는 파일 삭제
 		}
 	}
 
