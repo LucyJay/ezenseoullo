@@ -215,7 +215,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</update>
 
 	<!-- 스케줄러: 3일 후 신규를 예약가능으로 전환 -->
-		<update id="tourNotNew">
+	<update id="tourNotNew">
 		UPDATE tour SET status = '예약가능' WHERE status = '신규' AND regdate <![CDATA[<]]> sysdate - 3
 	</update>
 

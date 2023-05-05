@@ -59,7 +59,7 @@
 
 
 
-	<context:annotation-config></context:annotation-config>
+	<context:annotation-config />
 	<context:component-scan
 		base-package="com.seoullo" />
 	<aop:aspectj-autoproxy></aop:aspectj-autoproxy>
